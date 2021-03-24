@@ -1,6 +1,16 @@
+import { useCallback, useEffect } from 'react';
+import api from '../../services/api';
 import { Container } from './styles';
 
 export function TransactionsTable() {
+  const loadTransactions = useCallback(async () => {
+    const resp = await api.get('transactions');
+    console.log(resp);
+  }, []);
+
+  useEffect(() => {
+    loadTransactions();
+  }, [loadTransactions]);
   return (
     <Container>
       <table>
