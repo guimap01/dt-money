@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { FormEvent, useState } from 'react';
 import Modal from 'react-modal';
 import closeImg from '../../assets/close.svg';
@@ -31,7 +30,7 @@ export function NewTransactionModal({
       title,
       value,
       category,
-      createdAt: format(new Date(), 'dd/MM/yyyy'),
+      createdAt: new Date(),
     };
 
     api.post('/transactions', transaction);
