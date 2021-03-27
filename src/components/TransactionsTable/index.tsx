@@ -1,16 +1,27 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import api from '../../services/api';
 import { Container } from './styles';
 
+interface ITransaction {
+  id: string;
+  category: string;
+  title: string;
+  type: string;
+  value: number;
+  createdAt: string;
+}
+
 export function TransactionsTable() {
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const loadTransactions = useCallback(async () => {
     const resp = await api.get('transactions');
-    console.log(resp);
+    setTransactions(resp.data.transactions);
   }, []);
 
   useEffect(() => {
     loadTransactions();
   }, [loadTransactions]);
+  console.log(`transactions`, transactions);
   return (
     <Container>
       <table>
@@ -23,36 +34,20 @@ export function TransactionsTable() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td>R$12.000</td>
-            <td>Desenvolvimento</td>
-            <td>20/02/2021</td>
-          </tr>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td>R$12.000</td>
-            <td>Desenvolvimento</td>
-            <td>20/02/2021</td>
-          </tr>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td>R$12.000</td>
-            <td>Desenvolvimento</td>
-            <td>20/02/2021</td>
-          </tr>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td className="deposit">R$12.000</td>
-            <td>Desenvolvimento</td>
-            <td>20/02/2021</td>
-          </tr>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td className="withdraw">- R$12.000</td>
-            <td>Desenvolvimento</td>
-            <td>20/02/2021</td>
-          </tr>
+          {transactions.length > 0 ? (
+            transactions?.map((transaction) => (
+              <tr key={transaction.id}>
+                <td>{transaction.title}</td>
+                <td className={transaction.type}>R${transaction.value}</td>
+                <td>{transaction.category}</td>
+                <td>{transaction.createdAt}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td>Sem transações</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </Container>

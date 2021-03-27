@@ -8,7 +8,6 @@ export function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleOpenModal() {
-    console.log(1);
     setIsModalOpen(true);
   }
   function handleCloseModal() {
