@@ -4,8 +4,8 @@ import closeImg from '../../assets/close.svg';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
 import { v4 } from 'uuid';
-import api from '../../services/api';
 import { Container, TransactionTypeContainer, RadioBox } from './styles';
+import { useTransactions } from '../../hooks/useTransactions';
 Modal.setAppElement('#root');
 
 interface NewTransactionModalProps {
@@ -21,8 +21,9 @@ export function NewTransactionModal({
   const [title, setTitle] = useState('');
   const [value, setValue] = useState(0);
   const [category, setCategory] = useState('');
+  const { createTransaction } = useTransactions();
 
-  const handleSubmitForm = (e: FormEvent) => {
+  const handleSubmitForm = async (e: FormEvent) => {
     e.preventDefault();
     const transaction = {
       id: v4(),
@@ -32,10 +33,16 @@ export function NewTransactionModal({
       category,
       createdAt: new Date(),
     };
-
-    api.post('/transactions', transaction);
-
-    onRequestClose();
+    try {
+      await createTransaction(transaction);
+      setType('deposit');
+      setTitle('');
+      setValue(0);
+      setCategory('');
+      onRequestClose();
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
