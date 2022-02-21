@@ -1,11 +1,11 @@
 import { FormEvent, useState } from 'react';
 import Modal from 'react-modal';
-import closeImg from '../../assets/close.svg';
-import incomeImg from '../../assets/income.svg';
-import outcomeImg from '../../assets/outcome.svg';
+import closeImg from 'assets/close.svg';
+import incomeImg from 'assets/income.svg';
+import outcomeImg from 'assets/outcome.svg';
 import { v4 } from 'uuid';
+import { useTransactions } from 'hooks/useTransactions';
 import { Container, TransactionTypeContainer, RadioBox } from './styles';
-import { useTransactions } from '../../hooks/useTransactions';
 Modal.setAppElement('#root');
 
 interface NewTransactionModalProps {
@@ -40,7 +40,7 @@ export function NewTransactionModal({
       setValue(0);
       setCategory('');
       onRequestClose();
-    } catch (error) {
+    } catch (error: any) {
       alert(error.message);
     }
   };
